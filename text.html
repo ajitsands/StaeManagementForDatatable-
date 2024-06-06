@@ -1,0 +1,44 @@
+$("#btn_save_ship_type").click(function(){
+                var table = $('#tbl_ship_type_details').DataTable();
+
+});
+
+function addRowAtTop(data) {
+      var currentPage = table.page(); // Get the current page
+
+      table.row.add({
+          "ids": data['ids'],
+          "ship_type": data['ship_type'],
+          "ship_status": data['ship_status'],
+          "ids": '<div class="dropdown-menu" style=""><a class="dropdown-item waves-effect" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target=""><i class="ri-pencil-line me-1"></i> Edit</a> <a class="dropdown-item waves-effect" href="javascript:void(0);"><i class="ri-shield-line me-1"></i> Status </a></div>'
+      }).draw(false); // Use false to keep the current page
+
+      table.page(currentPage).draw(false); // Go back to the original page
+  }
+
+
+$.post("../controller/ship_type/ship_type_controller.php",{datas:data , t_name : "goltens_ship_type" , action : "add_ship_type"},function(res){
+                            
+if(res>=1)
+  {
+                  
+                  var newData = {
+                      'ids': res,
+                      'ship_type': data['ship_type'],
+                      'ship_status': 'Active'
+                  };
+                  swal('Success',"Ship Type Added Successfully...","success");
+                  addRowAtTop(newData);
+                 
+  $('input[type=text]').each(function() {
+                   $(this).val('');
+                  });
+  
+              }
+else{
+  
+  swal('Error',"Something Went Wrong","error");	
+
+}
+       
+   }); 
